@@ -1,0 +1,66 @@
+app:
+  app_id: "dfdsfds"
+  app_secret: "weeqqq"
+  env: "local"
+  server_addr: ":8081"
+
+log:
+  main_path: "./logs/rootcloud_edge.log"
+
+redis:
+  - ins_name: "rootcloud_edge"
+    addr: "vagrant01:6379"
+    auth: ""
+    db: 0
+    conn_timeout: 5000
+    read_timeout: 5000
+    write_timeout: 5000
+    max_idle: 10
+    max_active: 20000
+    idle_timeout: 6
+    max_conn_age: 6
+
+postgres:
+  - ins_name: "rootcloud"
+    addr: "localhost"
+    port: 5432
+    username: "postgres"
+    password: "123456"
+    db_name: "test"
+    max_idle_conns: 50
+    max_idle_time: 0
+    max_life_time: 0
+    max_open_conns: 100
+
+tdengine:
+  - ins_name: "rootcloud"
+    #    driver: "taosSql"
+    #    network: "tcp"
+    driver: "taosRestful"
+    network: "http"
+    fqdn: "vagrant01"
+    port: "6030"
+    restful_port: "6041"
+    username: "root"
+    password: "taosdata"
+    db_name: "test"
+    max_idle_conns: 50
+    max_idle_time: 1
+    max_life_time: 0
+    max_open_conns: 2000
+
+mqtt:
+  - ins_name: "rootcloud"
+    addr: "vagrant01"
+    port: "1883"
+    username: "admin"
+    password: "public"
+    client_id: "rootcloud_edge01"
+
+  - ins_name: "rootcloud2"
+    addr: "vagrant01"
+    port: "1883"
+    username: "admin"
+    password: "public"
+    client_id: "rootcloud_edge02"
+
