@@ -57,10 +57,3 @@ mqtt:
     password: "public"
     client_id: "rootcloud_edge01"
 
-  - ins_name: "rootcloud2"
-    addr: "vagrant01"
-    port: "1883"
-    username: "admin"
-    password: "public"
-    client_id: "rootcloud_edge02"
-

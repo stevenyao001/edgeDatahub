@@ -25,5 +25,14 @@ func (d *DataSourceC) RawDataReport(_ mqtt.Client, msg mqtt.Message) {
 		return
 	}
 
-	go logic.CollectorInsM.Get(msgEntity.DeviceId).MsgPutQueue(msgEntity)
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				logger.ErrorLog("DataSourceC-RawDataReport", "in queue fail", msgEntity.TraceId, r)
+			}
+		}()
+
+		logic.CollectorInsM.Get(msgEntity.DeviceId).MsgPutQueue(msgEntity)
+	}()
+
 }

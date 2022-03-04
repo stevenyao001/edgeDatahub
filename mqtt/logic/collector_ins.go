@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"edgeDatahub/global"
 	"edgeDatahub/rule"
 	"encoding/json"
 	"fmt"
@@ -49,13 +50,17 @@ func (ins *collectorIns) msgOutQueue() {
 			//	},
 			//}
 
-			buf, _ := json.Marshal(msg.Content)
+			fmt.Println("data------", msg.Content)
 
-			data, _ := rule.Computing(buf,"./rule/rule11.txt")
-			fmt.Println("data------", string(data))
+			rule.InitMiddle()
+			buf, _ := json.Marshal(msg.Content)
+			data, _ := rule.Computing(buf, "./rule/rule11.txt")
 			_ = json.Unmarshal(data, &msg.Content)
 
-			_, _ = mqtt2.GetClient("rootcloud").Publish("datasource/computingdata/"+msg.DeviceId, msg, 0, false)
+			_, _ = mqtt2.GetClient("rootcloud").Publish(fmt.Sprintf(global.PubRealtimeDataTopic, msg.DeviceId), msg, 0, false)
+
+			//tdengine
+
 		case <-ins.close:
 			return
 		}
