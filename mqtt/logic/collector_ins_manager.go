@@ -1,8 +1,10 @@
 package logic
 
 import (
+	"fmt"
 	mqtt2 "github.com/stevenyao001/edgeCommon/mqtt"
 	"sync"
+	"time"
 )
 
 var CollectorInsM *collectorInsManager
@@ -17,6 +19,13 @@ func init() {
 		mutex: sync.RWMutex{},
 		ins:   make(map[string]*collectorIns),
 	}
+
+	go func() {
+		for {
+			fmt.Println(CollectorInsM.ins)
+			time.Sleep(time.Second * 2)
+		}
+	}()
 }
 
 //
@@ -34,9 +43,9 @@ func (manager *collectorInsManager) New(deviceId string) *collectorIns {
 		close:    make(chan struct{}, 1),
 	}
 
-	go ins.msgOutQueue()
-
 	manager.ins[deviceId] = ins
+
+	go ins.msgOutQueue()
 
 	return ins
 }

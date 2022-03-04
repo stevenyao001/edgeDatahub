@@ -1,6 +1,8 @@
 package logic
 
 import (
+	"edgeDatahub/rule"
+	"encoding/json"
 	"fmt"
 	"github.com/stevenyao001/edgeCommon/logger"
 	mqtt2 "github.com/stevenyao001/edgeCommon/mqtt"
@@ -38,8 +40,22 @@ func (ins *collectorIns) msgOutQueue() {
 				return
 			}
 
-			fmt.Println(msg)
-			//mqtt2.GetClient("rootcloud").Publish()
+			//input := &rule.Input{
+			//	Ts:         time.Now().UnixNano(),
+			//	Properties: &rule.Properties{
+			//		AddressNames1: 1,
+			//		AddressNames2: 2,
+			//		AddressNames3: 3,
+			//	},
+			//}
+
+			buf, _ := json.Marshal(msg.Content)
+
+			data, _ := rule.Computing(buf,"./rule/rule11.txt")
+			fmt.Println("data------", string(data))
+			_ = json.Unmarshal(data, &msg.Content)
+
+			_, _ = mqtt2.GetClient("rootcloud").Publish("datasource/computingdata/"+msg.DeviceId, msg, 0, false)
 		case <-ins.close:
 			return
 		}

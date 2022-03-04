@@ -1,0 +1,1 @@
+[{"names":"AddressNames1","rule":"AddressNames1 = AddressNames1 / 10"},{"names":"AddressNames2","rule":""},{"names":"AddressNames3","rule":"AddressNames3 = AddressNames1 / AddressNames2"}]

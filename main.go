@@ -19,9 +19,20 @@ func main() {
 
 	edge.RegisterLogger(global.Conf.Log.MainPath)
 
-	mqttConfs := make([]mqtt.Conf, 0)
-	for k := range global.Conf.Mqtt {
-		mqttConfs = append(mqttConfs, mqtt.Conf{
+	initMqtt(edge, global.Conf.Mqtt)
+
+	initTdEngine(edge, global.Conf.Tdengine)
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	_ = <-quit
+
+}
+
+func initMqtt(edge edgeCommon.EdgeCommon, conf []global.MqttConf) {
+	mqttConf := make([]mqtt.Conf, 0)
+	for k := range conf {
+		mqttConf = append(mqttConf, mqtt.Conf{
 			InsName:  global.Conf.Mqtt[k].InsName,
 			ClientId: global.Conf.Mqtt[k].ClientId,
 			Username: global.Conf.Mqtt[k].Username,
@@ -30,11 +41,13 @@ func main() {
 			Port:     global.Conf.Mqtt[k].Port,
 		})
 	}
-	edge.RegisterMqtt(mqttConfs, mqtt2.Subscribes)
+	edge.RegisterMqtt(mqttConf, mqtt2.Subscribes)
+}
 
-	tdConfs := make([]tdengine.Conf, 0)
-	for k := range global.Conf.Tdengine {
-		tdConfs = append(tdConfs, tdengine.Conf{
+func initTdEngine(edge edgeCommon.EdgeCommon, conf []global.TdengineConf) {
+	tdConf := make([]tdengine.Conf, 0)
+	for k := range conf {
+		tdConf = append(tdConf, tdengine.Conf{
 			InsName:      global.Conf.Tdengine[k].InsName,
 			Driver:       global.Conf.Tdengine[k].Driver,
 			Network:      global.Conf.Tdengine[k].Network,
@@ -49,15 +62,5 @@ func main() {
 			MaxOpenConns: global.Conf.Tdengine[k].MaxOpenConns,
 		})
 	}
-	edge.RegisterTdEngine(tdConfs)
-
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
-	// kill (no param) default send syscall.SIGTERM
-	// kill -2 is syscall.SIGINT
-	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	_ = <-quit
-
+	edge.RegisterTdEngine(tdConf)
 }
