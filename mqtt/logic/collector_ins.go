@@ -33,7 +33,7 @@ func (ins *collectorIns) msgOutQueue() {
 		}
 		go ins.msgOutQueue()
 	}()
-
+	rule.InitMiddle()
 	for {
 		select {
 		case msg, ok := <-ins.msgQueue:
@@ -52,7 +52,6 @@ func (ins *collectorIns) msgOutQueue() {
 
 			fmt.Println("data------", msg.Content)
 
-			rule.InitMiddle()
 			buf, _ := json.Marshal(msg.Content)
 			data, _ := rule.Computing(buf, "./rule/rule11.txt")
 			_ = json.Unmarshal(data, &msg.Content)
