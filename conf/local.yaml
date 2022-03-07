@@ -55,5 +55,5 @@ mqtt:
     port: "1883"
     username: "admin"
     password: "public"
-    client_id: "rootcloud_edge01"
+    client_id: "edge_datahub01"
 

@@ -1,10 +1,8 @@
 package logic
 
 import (
-	"fmt"
 	mqtt2 "github.com/stevenyao001/edgeCommon/mqtt"
 	"sync"
-	"time"
 )
 
 var CollectorInsM *collectorInsManager
@@ -20,12 +18,12 @@ func init() {
 		ins:   make(map[string]*collectorIns),
 	}
 
-	go func() {
-		for {
-			fmt.Println(CollectorInsM.ins)
-			time.Sleep(time.Second * 2)
-		}
-	}()
+	//go func() {
+	//	for {
+	//		fmt.Println(CollectorInsM.ins)
+	//		time.Sleep(time.Second * 2)
+	//	}
+	//}()
 }
 
 //
