@@ -48,7 +48,7 @@ var middle *MiddleData
 func InitMiddle() {
 	middle = &MiddleData{
 		Properties: &MiddleProperties{
-			MegnetStatus: false,
+			MegnetStatus: true,
 			Num:          0,
 			Status:       0,
 			Ia:           0,
@@ -85,30 +85,16 @@ func Computing(buf []byte, path string) ([]byte, error) {
 }
 
 func pushMiddleData(input *Input) {
-	if middle.Properties.Num != input.Properties.Num {
-		middle = &MiddleData{
-			Ts: input.Ts,
-			Properties: &MiddleProperties{
-				MegnetStatus: input.Properties.MegnetStatus,
-				Num:          middle.Properties.Num + 1,
-				Status:       input.Properties.Status,
-				Ia:           input.Properties.Ia,
-				Ep:           input.Properties.Ep,
-				InstantEp:    input.Properties.InstantEp,
-			},
-		}
-	} else {
-		middle = &MiddleData{
-			Ts: input.Ts,
-			Properties: &MiddleProperties{
-				MegnetStatus: input.Properties.MegnetStatus,
-				Num:          middle.Properties.Num,
-				Status:       input.Properties.Status,
-				Ia:           input.Properties.Ia,
-				Ep:           input.Properties.Ep,
-				InstantEp:    input.Properties.InstantEp,
-			},
-		}
+	middle = &MiddleData{
+		Ts: input.Ts,
+		Properties: &MiddleProperties{
+			MegnetStatus: input.Properties.MegnetStatus,
+			Num:          input.Properties.Num,
+			Status:       input.Properties.Status,
+			Ia:           input.Properties.Ia,
+			Ep:           input.Properties.Ep,
+			InstantEp:    input.Properties.InstantEp,
+		},
 	}
 }
 
